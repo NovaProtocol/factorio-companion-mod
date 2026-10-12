@@ -1,0 +1,7 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2026-10-12
+  Features:
+    - Add the companion-test command, which reports the mod version so the
+      manager can confirm the mod is loaded.
+---------------------------------------------------------------------------------------------------
