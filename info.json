@@ -4,7 +4,7 @@
   "title": "FSM Companion",
   "author": "NovaProtocol",
   "description": "Companion mod for the Factorio Server Manager. Registers manager-facing console commands and powers the manager's always-on server features.",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "dependencies": [
     "base >= 2.0"
   ]
