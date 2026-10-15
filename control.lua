@@ -711,3 +711,79 @@ commands.add_command(
     respond(event, cached_report:sub(index * REPORT_CHUNK + 1, (index + 1) * REPORT_CHUNK))
   end
 )
+
+-- Game speed. The speed is a runtime fact and resets to 1 with every save load,
+-- so the manager remembers nothing: the mod keeps the last set value in its own
+-- save-scoped storage and re-applies it lazily — the next command after a load
+-- (the manager asks something every 5 seconds while a page is open) restores it.
+-- Nothing here is a script command: speed is set from the mod's own context,
+-- like the in-game speed-button mods do, so achievements are never stopped.
+local companionMinSpeed = 0.01
+local companionMaxSpeed = 3
+
+local function apply_remembered_speed()
+  local wanted = safe(function() return storage.companion_speed end, nil)
+  if not wanted then
+    return
+  end
+
+  local current = safe(function() return game.speed end, nil)
+  if current ~= wanted then
+    pcall(function() game.speed = wanted end)
+  end
+end
+
+local function speed_payload()
+  local speed = safe(function() return game.speed end, 1)
+  return {
+    speed = speed,
+    max_ups = speed * 60,
+    min_speed = companionMinSpeed,
+    max_speed = companionMaxSpeed,
+  }
+end
+
+commands.add_command(
+  "companion-tick",
+  "Returns the game tick and current speed as one small JSON body.",
+  function(event)
+    apply_remembered_speed()
+    respond(event, helpers.table_to_json({
+      tick = safe(function() return game.tick end, 0),
+      speed = safe(function() return game.speed end, 1),
+    }))
+  end
+)
+
+commands.add_command(
+  "companion-speed",
+  "Sets the game speed. Max UPS is speed x 60, so 0.5 = 30 UPS. Range "
+    .. "0.01 to 3 (0.6 to 180 max UPS). Usage: /companion-speed <speed>.",
+  function(event)
+    local value = tonumber(words(event.parameter)[1])
+
+    local payload = speed_payload()
+    if not value then
+      payload.error = "give a speed as a number"
+      respond(event, helpers.table_to_json(payload))
+      return
+    end
+
+    if value < companionMinSpeed or value > companionMaxSpeed then
+      payload.error = "speed must be between "
+        .. companionMinSpeed .. " (" .. companionMinSpeed * 60 .. " max UPS) and "
+        .. companionMaxSpeed .. " (" .. companionMaxSpeed * 60 .. " max UPS)"
+      respond(event, helpers.table_to_json(payload))
+      return
+    end
+
+    local ok, err = pcall(function() game.speed = value end)
+    if not ok then
+      respond(event, helpers.table_to_json({error = tostring(err)}))
+      return
+    end
+
+    safe(function() storage.companion_speed = game.speed end)
+    respond(event, helpers.table_to_json(speed_payload()))
+  end
+)

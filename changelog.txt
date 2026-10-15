@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.11
+Date: 2026-10-15
+  Changes:
+    - companion-tick and companion-speed: reading and setting game speed, kept across save loads; every command is achievement-safe
+
+---------------------------------------------------------------------------------------------------
 Version: 0.3.10
 Date: 2026-10-15
   Changes:
