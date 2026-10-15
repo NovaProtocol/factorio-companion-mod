@@ -1,4 +1,40 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.10
+Date: 2026-10-15
+  Changes:
+    - Science keeps the last measured research rate through a server pause, with its game-time age
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.9
+Date: 2026-10-14
+  Changes:
+    - Science counts only the packs the current research needs; graphs overlay production and consumption
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.8
+Date: 2026-10-14
+  Changes:
+    - Power: ignore disconnected fragments when reporting satisfaction; production: per-planet totals
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.7
+Date: 2026-10-14
+  Changes:
+    - Power page: all-planet grid summary, and graph data summed across every network
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+Date: 2026-10-14
+  Changes:
+    - Dashboards: scoped reports for power, production and science, with time windows and 300-sample graphs
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+Date: 2026-10-14
+  Changes:
+    - Add the chunked companion report and the dashboard endpoints
+
+---------------------------------------------------------------------------------------------------
 Version: 0.1.0
 Date: 2026-10-12
   Features:
